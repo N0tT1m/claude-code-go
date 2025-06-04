@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/n0tt1m/claude-code-go/internal/config"
-	"github.com/n0tt1m/claude-code-go/internal/llm"
-	"github.com/n0tt1m/claude-code-go/internal/tools"
+	"github.com/N0tT1m/claude-code-go/internal/config"
+	"github.com/N0tT1m/claude-code-go/internal/llm"
+	"github.com/N0tT1m/claude-code-go/internal/tools"
 )
 
 type Agent struct {

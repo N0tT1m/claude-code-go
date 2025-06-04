@@ -2,14 +2,13 @@
 package tools
 
 import (
-	"encoding/json"
 	"fmt"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"strings"
 
-	"github.com/n0tt1m/claude-code-go/internal/llm"
+	"github.com/N0tT1m/claude-code-go/internal/llm"
 )
 
 type Registry struct {

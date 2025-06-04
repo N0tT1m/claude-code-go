@@ -9,7 +9,7 @@ import (
 	"os"
 	"sync"
 
-	"github.com/n0tt1m/claude-code-go/internal/tools"
+	"github.com/N0tT1m/claude-code-go/internal/tools"
 )
 
 // MCP (Model Context Protocol) implementation
