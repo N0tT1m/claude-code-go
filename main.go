@@ -8,6 +8,7 @@ import (
 	"log"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/N0tT1m/claude-code-go/internal/agent"
 	"github.com/N0tT1m/claude-code-go/internal/config"
@@ -28,6 +29,7 @@ func main() {
 	rootCmd.PersistentFlags().StringP("model", "m", "", "LM Studio model to use")
 	rootCmd.PersistentFlags().BoolP("headless", "p", false, "Run in headless mode")
 	rootCmd.PersistentFlags().String("output-format", "text", "Output format (text, json)")
+	rootCmd.PersistentFlags().String("base-url", "", "LM Studio base URL (overrides config)")
 
 	// Add subcommands
 	rootCmd.AddCommand(
@@ -47,13 +49,36 @@ func runInteractiveMode(cmd *cobra.Command, args []string) {
 		log.Fatalf("Failed to load config: %v", err)
 	}
 
-	// Initialize LM Studio client
+	// Override base URL if provided via flag
+	if baseURL, _ := cmd.Flags().GetString("base-url"); baseURL != "" {
+		cfg.LMStudio.BaseURL = baseURL
+	}
+
+	// Override model if provided via flag
+	if model, _ := cmd.Flags().GetString("model"); model != "" {
+		cfg.LMStudio.Model = model
+	}
+
+	// Initialize LM Studio client with potentially overridden URL
 	client := llm.NewLMStudioClient(cfg.LMStudio.BaseURL)
+
+	// Test connection
+	fmt.Printf("Connecting to LM Studio at %s...\n", cfg.LMStudio.BaseURL)
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	models, err := client.GetModels(ctx)
+	if err != nil {
+		log.Fatalf("Failed to connect to LM Studio: %v\nMake sure LM Studio is running and the base URL is correct", err)
+	}
+
+	fmt.Printf("✅ Connected! Found %d models\n", len(models))
 
 	// Initialize agent
 	a := agent.New(client, cfg)
 
 	fmt.Println("Claude Go - AI Coding Assistant")
+	fmt.Printf("Using model: %s\n", cfg.LMStudio.Model)
 	fmt.Println("Type 'exit' to quit, '/help' for commands")
 	fmt.Println()
 

@@ -1,0 +1,16 @@
+{
+  "lm_studio": {
+    "base_url": "http://192.168.1.78:1234/v1",
+    "model": "qwen2.5-coder:14b",
+    "timeout": 30
+  },
+  "agent": {
+    "max_tokens": 4096,
+    "temperature": 0.7,
+    "system_prompt": "You are a helpful AI coding assistant..."
+  },
+  "git": {
+    "auto_stage": true,
+    "sign_off": false
+  }
+}
