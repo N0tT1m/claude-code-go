@@ -1,4 +1,4 @@
-module claude-code-go
+module github.com/N0tT1m/claude-code-go
 
 go 1.24
 
