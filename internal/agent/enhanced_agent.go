@@ -2,8 +2,7 @@
 package agent
 
 import (
-	"bufio"
-	"context"
+	builtinContext "context"
 	"fmt"
 	"os"
 	"strings"
@@ -60,7 +59,7 @@ func (a *EnhancedAgent) ConnectToMCPServer(socketPath string) error {
 	return a.mcpClient.Initialize("claude-go-client", "0.1.0")
 }
 
-func (a *EnhancedAgent) ProcessInputStreaming(ctx context.Context, input string, callback func(string) error) error {
+func (a *EnhancedAgent) ProcessInputStreaming(ctx builtinContext.Context, input string, callback func(string) error) error {
 	// Add input to session memory
 	a.sessionMemory = append(a.sessionMemory, llm.Message{
 		Role:    "user",
@@ -210,7 +209,7 @@ func (a *EnhancedAgent) registerProjectResources() error {
 	return nil
 }
 
-func (a *EnhancedAgent) GetProjectSummary(ctx context.Context) (string, error) {
+func (a *EnhancedAgent) GetProjectSummary(ctx builtinContext.Context) (string, error) {
 	projectCtx, err := a.contextManager.GetProjectContext()
 	if err != nil {
 		return "", err
@@ -246,7 +245,7 @@ func (a *EnhancedAgent) GetProjectSummary(ctx context.Context) (string, error) {
 	return summary.String(), nil
 }
 
-func (a *EnhancedAgent) ExecuteCommand(ctx context.Context, command string) (string, error) {
+func (a *EnhancedAgent) ExecuteCommand(ctx builtinContext.Context, command string) (string, error) {
 	// Enhanced command execution with context awareness
 	parts := strings.Fields(command)
 	if len(parts) == 0 {
@@ -272,7 +271,7 @@ func (a *EnhancedAgent) ExecuteCommand(ctx context.Context, command string) (str
 	}
 }
 
-func (a *EnhancedAgent) analyzeCodebase(ctx context.Context) (string, error) {
+func (a *EnhancedAgent) analyzeCodebase(ctx builtinContext.Context) (string, error) {
 	projectCtx, err := a.contextManager.GetProjectContext()
 	if err != nil {
 		return "", err
@@ -325,7 +324,7 @@ Please provide:
 	return resp.Choices[0].Message.Content, nil
 }
 
-func (a *EnhancedAgent) showCurrentContext(ctx context.Context) (string, error) {
+func (a *EnhancedAgent) showCurrentContext(ctx builtinContext.Context) (string, error) {
 	projectCtx, err := a.contextManager.GetProjectContext()
 	if err != nil {
 		return "", err

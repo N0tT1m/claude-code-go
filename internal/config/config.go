@@ -42,7 +42,7 @@ func Load() (*Config, error) {
 	if _, err := os.Stat(configPath); os.IsNotExist(err) {
 		defaultConfig := &Config{
 			LMStudio: LMStudioConfig{
-				BaseURL: "http://localhost:1234/v1",
+				BaseURL: "http://192.168.1.78:1234/v1",
 				Model:   "qwen2.5-coder:14b",
 				Timeout: 30,
 			},
