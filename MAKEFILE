@@ -1,0 +1,48 @@
+.PHONY: build install test clean run
+
+BINARY_NAME=claude-go
+BUILD_DIR=build
+VERSION?=0.1.0
+
+build:
+@echo "Building $(BINARY_NAME)..."
+@mkdir -p $(BUILD_DIR)
+@go build -ldflags="-X main.version=$(VERSION)" -o $(BUILD_DIR)/$(BINARY_NAME) cmd/main.go
+
+install: build
+@echo "Installing $(BINARY_NAME)..."
+@cp $(BUILD_DIR)/$(BINARY_NAME) /usr/local/bin/$(BINARY_NAME)
+
+test:
+@echo "Running tests..."
+@go test -v ./...
+
+clean:
+@echo "Cleaning up..."
+@rm -rf $(BUILD_DIR)
+
+run: build
+@echo "Running $(BINARY_NAME)..."
+@$(BUILD_DIR)/$(BINARY_NAME)
+
+# Development targets
+dev-setup:
+@echo "Setting up development environment..."
+@go mod tidy
+@go mod download
+
+lint:
+@echo "Running linter..."
+@golangci-lint run
+
+fmt:
+@echo "Formatting code..."
+@go fmt ./...
+
+# Docker targets (for LM Studio integration testing)
+docker-build:
+@docker build -t claude-go .
+
+docker-run:
+@docker run -it --rm --network host claude-go
+
